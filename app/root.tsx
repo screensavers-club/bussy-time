@@ -1,5 +1,4 @@
 import {
-  Link,
   Links,
   LiveReload,
   Meta,
@@ -9,6 +8,7 @@ import {
   useCatch,
 } from "remix";
 import type { LinksFunction } from "remix";
+
 import { ChakraProvider, extendTheme, Heading, Box } from "@chakra-ui/react";
 
 // https://remix.run/api/app#links
@@ -25,6 +25,11 @@ export let links: LinksFunction = () => {
     {
       rel: "icon",
       href: "/favicon.png",
+    },
+
+    {
+      rel: "manifest",
+      href: "/manifest.json",
     },
   ];
 };
@@ -77,6 +82,21 @@ function Document({
     <html lang="en">
       <head>
         <meta charSet="utf-8" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="application-name" content="Busket" />
+        <meta name="apple-mobile-web-app-title" content="Busket" />
+        <meta name="theme-color" content="#f5a623" />
+        <meta name="msapplication-navbutton-color" content="#f5a623" />
+        <meta
+          name="apple-mobile-web-app-status-bar-style"
+          content="black-translucent"
+        />
+        <meta name="msapplication-starturl" content="https://busket.wtf" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         {title ? <title>{title}</title> : null}
         <Meta />

@@ -2,6 +2,14 @@ import { Text, Button, Container, Stack, VStack } from "@chakra-ui/react";
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "remix";
+import type { MetaFunction } from "remix";
+
+export let meta: MetaFunction = () => {
+  return {
+    title: "Nearby Stops | Busket",
+    description: "Why my bus haven't come",
+  };
+};
 
 export default function NearbyList() {
   const [nearbyStops, setNearbyStops] = useState<BusStop[]>([]);

@@ -4,8 +4,8 @@ import BusstopInput from "../components/busstop-input";
 
 export let meta: MetaFunction = () => {
   return {
-    title: "Bussy Time",
-    description: "A simple bus time loader",
+    title: "Busket",
+    description: "Why my bus haven't come",
   };
 };
 

@@ -1,6 +1,14 @@
 import { Button, Container, VStack, Text, Heading } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import type { MetaFunction } from "remix";
+
+export let meta: MetaFunction = () => {
+  return {
+    title: "Fav Stops | Busket",
+    description: "Why my bus haven't come",
+  };
+};
 
 export default function FavList() {
   let [stops, setStops] = useState<BusStop[]>([]);

@@ -1,13 +1,11 @@
-import { Button } from "@chakra-ui/react";
 import { useEffect } from "react";
-import { ActionFunction, MetaFunction } from "remix";
-import { redirect } from "remix";
+import { MetaFunction } from "remix";
 
 // https://remix.run/api/conventions#meta
 export let meta: MetaFunction = () => {
   return {
-    title: "Bussy Time",
-    description: "A simple bus time loader",
+    title: "Busket",
+    description: "Why my bus haven't come",
   };
 };
 

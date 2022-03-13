@@ -34,10 +34,10 @@ export let loader: LoaderFunction = ({ params }) => {
     });
 };
 
-export let meta: MetaFunction = () => {
+export let meta: MetaFunction = ({ params }) => {
   return {
-    title: "Bussy Time",
-    description: "A simple bus time loader",
+    title: `${params.stop} | Busket`,
+    description: "Why my bus haven't come",
   };
 };
 
