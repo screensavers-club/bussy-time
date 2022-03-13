@@ -92,10 +92,7 @@ function Document({
         <meta name="apple-mobile-web-app-title" content="Busket" />
         <meta name="theme-color" content="#f5a623" />
         <meta name="msapplication-navbutton-color" content="#f5a623" />
-        <meta
-          name="apple-mobile-web-app-status-bar-style"
-          content="black-translucent"
-        />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="msapplication-starturl" content="https://busket.wtf" />
         <meta name="viewport" content="initial-scale=1,  width=device-width" />
         {title ? <title>{title}</title> : null}
