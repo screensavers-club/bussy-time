@@ -1,9 +1,9 @@
 import { json } from "@remix-run/server-runtime";
 import { createClient } from "redis";
 
-export function loader({ params }) {
+export async function loader({ params }: { params: any }) {
   const { stop } = params;
-  console.log(stop);
+  console.log({ stop });
 
   const client = createClient({ url: process.env.REDIS_URL });
 

@@ -13,7 +13,6 @@ export default function StopIndex() {
   return (
     <>
       <BusstopInput />
-
       <Outlet />
     </>
   );

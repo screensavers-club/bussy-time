@@ -3,6 +3,7 @@ import { useLoaderData, json } from "remix";
 
 import {
   Container,
+  Stack,
   VStack,
   Flex,
   Heading,
@@ -13,36 +14,6 @@ import {
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { css } from "@emotion/react";
-
-interface BusArrivalResponseData {
-  "odata.metadata": string;
-  BusStopCode: string;
-  Services: BusArrivalService[];
-}
-
-interface BusArrivalService {
-  ServiceNo: string;
-  Operator: string;
-  NextBus: BusArrivalNextBus;
-  NextBus2: BusArrivalNextBus;
-  NextBus3: BusArrivalNextBus;
-}
-
-interface BusArrivalNextBus {
-  OriginCode: string;
-  DestinationCode: string;
-  EstimatedArrival: string;
-  Latitude: string;
-  Longitude: string;
-  VisitNumber: string;
-  Load: string;
-  Feature: string;
-  Type: string;
-}
-
-interface BusArrivalError {
-  err: any;
-}
 
 export let loader: LoaderFunction = ({ params }) => {
   const arrivalEndpoint = `http://datamall2.mytransport.sg/ltaodataservice/BusArrivalv2?BusStopCode=${params.stop}`;
@@ -72,8 +43,9 @@ export let meta: MetaFunction = () => {
 
 export default function PageStop() {
   const data = useLoaderData();
-  const [busstop, setBusstop] = useState<{ Description?: string }>({});
+  const [busstop, setBusstop] = useState<BusStop>();
   const [sort, setSort] = useState<BusStopSort>("bus");
+  const [isFav, setIsFav] = useState<boolean>(false);
 
   useEffect(() => {
     if (!data.BusStopCode) {
@@ -82,7 +54,51 @@ export default function PageStop() {
     axios.get(`/stop/info/${data.BusStopCode}`).then(({ data }) => {
       setBusstop(data);
     });
+
+    const favStops = JSON.parse(
+      localStorage.getItem("fav-stops") || "[]"
+    ) as LocalStorageFavStop[];
+    const storedFav =
+      favStops.findIndex((s) => s.busstop === data.BusStopCode) > -1;
+    setIsFav(storedFav);
+
+    const storedSort = JSON.parse(
+      localStorage.getItem("sort-by-bus") || "false"
+    ) as boolean;
+    setSort(storedSort ? "bus" : "time");
   }, []);
+
+  useEffect(() => {
+    const favStops = JSON.parse(
+      localStorage.getItem("fav-stops") || "[]"
+    ) as LocalStorageFavStop[];
+
+    const storedFav =
+      favStops.findIndex((s) => s.busstop === data.BusStopCode) > -1;
+
+    if (isFav) {
+      if (!storedFav) {
+        localStorage.setItem(
+          "fav-stops",
+          JSON.stringify([
+            ...favStops,
+            { busstop: data.BusStopCode } as LocalStorageFavStop,
+          ])
+        );
+      }
+    } else {
+      if (storedFav) {
+        localStorage.setItem(
+          "fav-stops",
+          JSON.stringify(favStops.filter((s) => s.busstop !== data.BusStopCode))
+        );
+      }
+    }
+  }, [isFav]);
+
+  useEffect(() => {
+    localStorage.setItem("sort-by-bus", JSON.stringify(sort === "bus"));
+  }, [sort]);
 
   if ((data as BusArrivalError).err) {
     return <Container>An error has occurred</Container>;
@@ -93,14 +109,56 @@ export default function PageStop() {
   return (
     <Container padding={2} paddingTop={"80px"}>
       <VStack>
-        <Flex justifyContent="space-between" width="100%" alignItems="start">
-          <Box>
-            <Heading size="2xl" color="gray.700">
-              {busArrivalData.BusStopCode}{" "}
-            </Heading>
+        <Flex
+          justifyContent="space-between"
+          width="100%"
+          alignItems="start"
+          position="sticky"
+          top="60px"
+          pb="20px"
+          backgroundColor={"white"}
+          zIndex={3}
+          borderBottomWidth={1}
+        >
+          <Box mt={4} width="100%">
+            <Stack
+              width={`100%`}
+              direction="row"
+              align="center"
+              justifyContent={"flex-start"}
+            >
+              <Heading
+                size="2xl"
+                color="gray.600"
+                as="h1"
+                letterSpacing={"-0.02em"}
+              >
+                {busArrivalData.BusStopCode}{" "}
+              </Heading>
+              <Button
+                background="transparent"
+                fontSize="2xl"
+                onClick={() => {
+                  setIsFav(!isFav);
+                }}
+                px={0}
+              >
+                {isFav ? "🌟" : "⭐"}
+              </Button>
+            </Stack>
 
-            <Heading size="md" color="gray.400">
-              {busstop?.Description?.toUpperCase() || ""}
+            <Heading
+              size="sm"
+              letterSpacing={"-0.02em"}
+              fontWeight={500}
+              color={busstop?.Description ? "gray.500" : "white"}
+              css={css`
+                transition: color ease 0.3s;
+              `}
+            >
+              {busstop?.Description?.toUpperCase() || "loading"}
+              <br />
+              {busstop?.RoadName || "loading"}
             </Heading>
           </Box>
         </Flex>
@@ -168,21 +226,18 @@ export default function PageStop() {
           onClick={() => {
             setSort(sort === "bus" ? "time" : "bus");
           }}
-          css={css`
-            background: #fff;
-          `}
-          boxShadow="sm"
+          fontSize="3xl"
           mr={2}
+          borderWidth={1}
+          borderColor="gray.300"
         >
-          {sort === "bus" ? "🚌" : "⏲️"}
+          {sort === "bus" ? "🔢" : "🕙️"}
         </Button>
         <Button
-          boxShadow="sm"
+          fontSize="3xl"
           onClick={() => window.location.reload()}
-          css={css`
-            background: #f5a623;
-            color: white;
-          `}
+          borderWidth={1}
+          borderColor="gray.300"
         >
           🔄
         </Button>

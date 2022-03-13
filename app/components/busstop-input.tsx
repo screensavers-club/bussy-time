@@ -6,6 +6,7 @@ import {
   Button,
   Image,
 } from "@chakra-ui/react";
+import { HamburgerIcon } from "@chakra-ui/icons";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -32,7 +33,7 @@ export default function BusstopInput() {
             navigate(`/stop/nearby`);
           }}
         >
-          🚌
+          <HamburgerIcon />
         </Button>
         <NumberInput width="100%" ml={2}>
           <NumberInputField
