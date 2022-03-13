@@ -9,6 +9,7 @@ import {
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { css } from "@emotion/react";
 
 export default function BusstopInput() {
   const [busNumberInput, setBusNumberInput] = useState<number | string>("");
@@ -21,7 +22,7 @@ export default function BusstopInput() {
       w="100%"
       top="0"
       zIndex="200"
-      backgroundColor="#fff"
+      backgroundColor="#f5a623"
       padding={2}
       boxSizing="border-box"
       boxShadow="lg"
@@ -32,6 +33,10 @@ export default function BusstopInput() {
           onClick={() => {
             navigate(`/stop/nearby`);
           }}
+          backgroundColor="#f5a623"
+          color="white"
+          borderColor="white"
+          borderWidth={1}
         >
           <HamburgerIcon />
         </Button>
@@ -47,6 +52,20 @@ export default function BusstopInput() {
             }}
             autoFocus
             borderRightRadius={0}
+            backgroundColor="#f5a623"
+            color="white"
+            borderColor="white"
+            borderWidth={1}
+            css={css`
+              &:focus {
+                border-color: white;
+                box-shadow: 0 0 0 1px white;
+              }
+
+              &::placeholder {
+                color: rgba(255, 255, 255, 0.8);
+              }
+            `}
           />
         </NumberInput>
 

@@ -8,6 +8,7 @@ import {
   useCatch,
 } from "remix";
 import type { LinksFunction } from "remix";
+import { css } from "@emotion/react";
 
 import { ChakraProvider, extendTheme, Heading, Box } from "@chakra-ui/react";
 
@@ -101,6 +102,19 @@ function Document({
       </head>
       <body>
         {children}
+        <Box
+          id="overscroll-background"
+          css={css`
+            background: white;
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+            bottom: 0;
+            left: 0;
+          `}
+        />
         <ScrollRestoration />
         <Scripts />
         {process.env.NODE_ENV === "development" && <LiveReload />}
