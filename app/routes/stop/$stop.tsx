@@ -142,6 +142,7 @@ export default function PageStop() {
                   setIsFav(!isFav);
                 }}
                 px={0}
+                key={`fav_button_${busArrivalData.BusStopCode}`}
               >
                 {isFav ? "🌟" : "⭐"}
               </Button>
