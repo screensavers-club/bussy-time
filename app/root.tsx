@@ -97,10 +97,7 @@ function Document({
           content="black-translucent"
         />
         <meta name="msapplication-starturl" content="https://busket.wtf" />
-        <meta
-          name="viewport"
-          content="initial-scale=1, viewport-fit=cover, width=device-width"
-        />
+        <meta name="viewport" content="initial-scale=1,  width=device-width" />
         {title ? <title>{title}</title> : null}
         <Meta />
         <Links />
