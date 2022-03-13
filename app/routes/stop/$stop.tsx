@@ -1,5 +1,5 @@
 import type { MetaFunction, LoaderFunction } from "remix";
-import { useLoaderData, json, Link } from "remix";
+import { useLoaderData, json } from "remix";
 
 import {
   Container,
@@ -10,9 +10,9 @@ import {
   Box,
   Button,
 } from "@chakra-ui/react";
-import { RepeatIcon } from "@chakra-ui/icons";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { css } from "@emotion/react";
 
 interface BusArrivalResponseData {
   "odata.metadata": string;
@@ -70,9 +70,10 @@ export let meta: MetaFunction = () => {
   };
 };
 
-export default function Index() {
+export default function PageStop() {
   const data = useLoaderData();
   const [busstop, setBusstop] = useState<{ Description?: string }>({});
+  const [sort, setSort] = useState<BusStopSort>("bus");
 
   useEffect(() => {
     if (!data.BusStopCode) {
@@ -90,32 +91,29 @@ export default function Index() {
   const busArrivalData = data as BusArrivalResponseData;
 
   return (
-    <Container padding={0}>
+    <Container padding={2} paddingTop={"80px"}>
       <VStack>
         <Flex justifyContent="space-between" width="100%" alignItems="start">
           <Box>
-            <Heading size="2xl" color="gray.500">
+            <Heading size="2xl" color="gray.700">
               {busArrivalData.BusStopCode}{" "}
             </Heading>
 
-            <Heading size="md" color="gray.700">
-              {busstop.Description || ""}
+            <Heading size="md" color="gray.400">
+              {busstop?.Description?.toUpperCase() || ""}
             </Heading>
           </Box>
-
-          <Button
-            fontSize="xl"
-            variant="ghost"
-            color="gray.400"
-            rightIcon={<RepeatIcon />}
-            onClick={() => {
-              window && window.location.reload();
-            }}
-          ></Button>
         </Flex>
-        {busArrivalData.Services.sort(
-          (a, b) => parseInt(a.ServiceNo) - parseInt(b.ServiceNo)
-        ).map((service) => {
+        {busArrivalData.Services.sort((a, b) => {
+          if (sort === "bus") {
+            return parseInt(a.ServiceNo) - parseInt(b.ServiceNo);
+          } else {
+            return (
+              new Date(a.NextBus.EstimatedArrival).getTime() -
+              new Date(b.NextBus.EstimatedArrival).getTime()
+            );
+          }
+        }).map((service) => {
           return (
             <Flex
               key={service.ServiceNo}
@@ -159,6 +157,36 @@ export default function Index() {
           );
         })}
       </VStack>
+      <Box
+        css={css`
+          position: fixed;
+          right: 10px;
+          bottom: 10px;
+        `}
+      >
+        <Button
+          onClick={() => {
+            setSort(sort === "bus" ? "time" : "bus");
+          }}
+          css={css`
+            background: #fff;
+          `}
+          boxShadow="sm"
+          mr={2}
+        >
+          {sort === "bus" ? "🚌" : "⏲️"}
+        </Button>
+        <Button
+          boxShadow="sm"
+          onClick={() => window.location.reload()}
+          css={css`
+            background: #f5a623;
+            color: white;
+          `}
+        >
+          🔄
+        </Button>
+      </Box>
     </Container>
   );
 }
