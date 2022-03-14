@@ -1,3 +1,4 @@
+import { Flex, Text } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { MetaFunction } from "remix";
 
@@ -14,8 +15,8 @@ export default function Index() {
     window.location.href = "/stop/nearby";
   }, []);
   return (
-    <>
-      <h1>Redirecting...</h1>
-    </>
+    <Flex justify={"center"} py={8}>
+      <Text fontSize="8xl">🚌</Text>
+    </Flex>
   );
 }
